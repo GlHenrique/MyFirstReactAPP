@@ -23,10 +23,21 @@ import {
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import api from '../../services/api';
 import AsyncStorage from "@react-native-community/async-storage";
+import PropTypes from 'prop-types';
 
 const styles = StyleSheet.create({});
 
 export default class Main extends React.Component {
+
+    static navigationOptions = {
+        title: 'Usuários'
+    };
+
+    static propTypes = {
+        navigation: PropTypes.shape({
+            navigate: PropTypes.func
+        }).isRequired
+    }
 
     state = {
         newUser: '',
@@ -35,9 +46,9 @@ export default class Main extends React.Component {
     };
 
     async componentDidMount() {
-        const users =  await AsyncStorage.getItem('users');
+        const users = await AsyncStorage.getItem('users');
         if (users) {
-            this.setState({users : JSON.parse(users)})
+            this.setState({users: JSON.parse(users)})
         }
     }
 
@@ -49,6 +60,7 @@ export default class Main extends React.Component {
     }
 
     handleAddUser = async () => {
+        debugger
         const {users, newUser} = this.state;
 
         this.setState({loading: true});
@@ -66,8 +78,11 @@ export default class Main extends React.Component {
             loading: false
         });
         Keyboard.dismiss();
+    };
 
-
+    handleNavigate = (user) => {
+        const {navigation} = this.props;
+        navigation.navigate('User', {user});
     };
 
     render() {
@@ -77,7 +92,7 @@ export default class Main extends React.Component {
                 <Container>
                     <StatusBar
                         barStyle="light-content"
-                        backgroundColor="#8888"/>
+                        backgroundColor="#7159C1"/>
                     <Form>
                         <Input
                             autoCorrect={false}
@@ -104,8 +119,7 @@ export default class Main extends React.Component {
                                 <Name>{item.name}</Name>
                                 <Bio>{item.bio}</Bio>
                                 <ProfileButton
-                                    onPress={() => {
-                                    }}>
+                                    onPress={() => this.handleNavigate(item)}>
                                     <ProfileButtonText>
                                         Ver perfil
                                     </ProfileButtonText>
@@ -119,6 +133,4 @@ export default class Main extends React.Component {
     }
 }
 
-Main.navigationOptions = {
-    title: 'Usuários'
-};
+
