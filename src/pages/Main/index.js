@@ -30,7 +30,7 @@ const styles = StyleSheet.create({});
 export default class Main extends React.Component {
 
     static navigationOptions = {
-        title: 'Usuários'
+        title: 'Rocketseat'
     };
 
     static propTypes = {
