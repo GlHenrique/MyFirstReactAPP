@@ -37,7 +37,7 @@ export default class Main extends React.Component {
         navigation: PropTypes.shape({
             navigate: PropTypes.func
         }).isRequired
-    }
+    };
 
     state = {
         newUser: '',
@@ -60,7 +60,6 @@ export default class Main extends React.Component {
     }
 
     handleAddUser = async () => {
-        debugger
         const {users, newUser} = this.state;
 
         this.setState({loading: true});

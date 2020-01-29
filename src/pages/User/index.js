@@ -1,6 +1,19 @@
 import React from 'react';
-import { View } from 'react-native';
 import api from '../../services/api';
+import PropTypes from 'prop-types';
+import {
+    Avatar,
+    Name,
+    Bio,
+    Header,
+    Container,
+    Stars,
+    Starred,
+    OwnerAvatar,
+    Info,
+    Title,
+    Author
+} from "./styles";
 
 export default class User extends React.Component {
 
@@ -8,6 +21,12 @@ export default class User extends React.Component {
     static navigationOptions = ({navigation}) => ({
         title: navigation.getParam('user').name
     });
+
+    static propTypes = {
+        navigation: PropTypes.shape({
+            getParam: PropTypes.func
+        }).isRequired
+    };
 
     state = {
         stars: []
@@ -22,8 +41,28 @@ export default class User extends React.Component {
     }
 
     render() {
+        const {navigation} = this.props;
+        const {stars} = this.state;
+        const user = navigation.getParam('user');
         return (
-            <View/>
+            <Container>
+                <Header>
+                    <Avatar source={{uri: user.avatar}}/>
+                    <Name>{user.name}</Name>
+                    <Bio>{user.bio}</Bio>
+                </Header>
+                <Stars data={stars}
+                       keyExtractor={star => String(star.id)}
+                       renderItem={({item}) => (
+                           <Starred>
+                               <OwnerAvatar source={{uri: item.owner.avatar_url}}/>
+                               <Info>
+                                   <Title>{item.name}</Title>
+                                   <Author>{item.owner.login}</Author>
+                               </Info>
+                           </Starred>
+                       )}/>
+            </Container>
         )
     }
 }
